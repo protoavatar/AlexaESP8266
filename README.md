@@ -5,3 +5,5 @@ This project uses [fauxmoESP](https://github.com/vintlabs/fauxmoESP) library to 
 Project is managed and compiled using [PlatformIO](https://platformio.org/) (By far the best way to interact with this devices).
 I’m using Arduino’s built in `ESP8266WiFi.h` library to manage the WiFi connection.
 At this stage, I am only debugging via terminal, not acting on the Relay.
+
+Resources: https://github.com/javimata/arduino/tree/master/esp8266-esp01s
