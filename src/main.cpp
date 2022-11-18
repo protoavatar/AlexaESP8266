@@ -5,7 +5,11 @@
 #define WIFI_SSID "Jacobiano"  //Cambiar por tu WIFI SSID
 #define WIFI_PASS "galgogalgo"  //Cambiar por tu WIFI password
 #define SERIAL_BAUDRATE 115200
-#define ID_ONE "RELAY 1" // Es el nombre con el que lo identificará Alexa
+#define ID_ONE "LUZ" // Es el nombre con el que lo identificará Alexa
+
+// Used module does not work with GPIO port but with Serial Interface Commands
+byte relON[] = {0xA0, 0x01, 0x01, 0xA2};  //Hex command to send to onboard serial microprocessor for open relay
+byte relOFF[] = {0xA0, 0x01, 0x00, 0xA1}; //Hex command to send to serial for close relay
 
 fauxmoESP fauxmo;
 
@@ -37,7 +41,7 @@ void wifiSetup() {
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(SERIAL_BAUDRATE);
-
+  Serial.write(relOFF, sizeof(relOFF)); // turns the relay OFF
     // Wifi
     wifiSetup();
 
@@ -64,7 +68,12 @@ void setup() {
 
         // Checking for device_id is simpler if you are certain about the order they are loaded and it does not change.
         // Otherwise comparing the device_name is safer.
-
+        if (state)
+        {
+          Serial.write(relON, sizeof(relON)); // turns the relay ON
+        } else {
+          Serial.write(relOFF, sizeof(relOFF)); // turns the relay OFF
+        }
 
     });
 }
