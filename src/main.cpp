@@ -4,7 +4,7 @@
 
 #define WIFI_SSID "Jacobiano"  //Cambiar por tu WIFI SSID
 #define WIFI_PASS "galgogalgo"  //Cambiar por tu WIFI password
-#define SERIAL_BAUDRATE 115200
+#define SERIAL_BAUDRATE 9600
 #define ID_ONE "LUZ" // Es el nombre con el que lo identificará Alexa
 
 // Used module does not work with GPIO port but with Serial Interface Commands
@@ -42,6 +42,10 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(SERIAL_BAUDRATE);
   Serial.write(relOFF, sizeof(relOFF)); // turns the relay OFF
+    // GPIO configuration for ESP+relays modules that manage activation via GPIO (ej watering system at my department)
+    //pinMode(0, OUTPUT); // 8266 Pin to the relay
+    //digitalWrite(0, HIGH);    // Turn off 8266 relay
+
     // Wifi
     wifiSetup();
 
@@ -64,15 +68,17 @@ void setup() {
         // Just remember not to delay too much here, this is a callback, exit as soon as possible.
         // If you have to do something more involved here set a flag and process it in your main loop.
 
-        Serial.printf("[MAIN] Device #%d (%s) state: %s value: %d\n", device_id, device_name, state ? "ON" : "OFF", value);
+        Serial.printf("[LUZ] Device #%d (%s) state: %s value: %d\n", device_id, device_name, state ? "ON" : "OFF", value);
 
         // Checking for device_id is simpler if you are certain about the order they are loaded and it does not change.
         // Otherwise comparing the device_name is safer.
         if (state)
         {
           Serial.write(relON, sizeof(relON)); // turns the relay ON
+          //digitalWrite(0, LOW);    // Turn on 8266 relay
         } else {
           Serial.write(relOFF, sizeof(relOFF)); // turns the relay OFF
+          //digitalWrite(0, HIGH);    // Turn off 8266 relay
         }
 
     });
